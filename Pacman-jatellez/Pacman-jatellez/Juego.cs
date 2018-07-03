@@ -12,13 +12,21 @@ namespace Pacman_jatellez
 {
     public partial class Juego : Form
     {
+        public event EventHandler<AgregarUsuarioEventArgs> OnModificar;
+
         Timer timer = new Timer();
         Timer timer2 = new Timer();
         Timer timer3 = new Timer();
+        int xdif = 0;
+        int ydif = 0;
+        List<Usuario> Data;
+        Usuario usuario;
 
-        public Juego()
+        public Juego(List<Usuario> Datos, Usuario user)
         {
             InitializeComponent();
+            Data = Datos;
+            usuario = user;
             KeyDown += new KeyEventHandler(Juego_KeyDown);
             timer.Interval = 30;
             timer.Tick += timer_Tick;
@@ -46,38 +54,46 @@ namespace Pacman_jatellez
             if(e.KeyCode == Keys.Left)
             {
                 pictureBox1.Image = Pacman_jatellez.Properties.Resources.pacman_left;
-                if (x - 20 <= 0)
+                if (x - 4 <= 0)
                 {
                     x = 0;
                 }
-                else { x -= 20; }
+                else { x -= 4; }
+                xdif = -4;
+                ydif = 0;
             }
             else if(e.KeyCode == Keys.Right)
             {
                 pictureBox1.Image = Pacman_jatellez.Properties.Resources.pacman_right;
-                if (x + 20 >= 560)
+                if (x + 4 >= 560)
                 {
                     x = 560;
                 }
-                else { x += 20; }
+                else { x += 4; }
+                xdif = 4;
+                ydif = 0;
             }
             else if(e.KeyCode == Keys.Up)
             {
                 pictureBox1.Image = Pacman_jatellez.Properties.Resources.pacman_up;
-                if (y - 20 <= 0)
+                if (y - 4 <= 0)
                 {
                     y = 0;
                 }
-                else { y -= 20; }
+                else { y -= 4; }
+                xdif = 0;
+                ydif = -4;
             }
             else if(e.KeyCode == Keys.Down)
             {
                 pictureBox1.Image = Pacman_jatellez.Properties.Resources.pacman_down;
-                if (y + 20 >= 580)
+                if (y + 4 >= 580)
                 {
                     y = 580;
                 }
-                else { y += 20; }
+                else { y += 4; }
+                xdif = 0;
+                ydif = 4;
             }
 
             pictureBox1.Location = new System.Drawing.Point(x, y);
@@ -92,11 +108,31 @@ namespace Pacman_jatellez
         {
             if (pictureBox1.Bounds.IntersectsWith(pictureBox2.Bounds))
             {
-                MessageBox.Show("Juego Terminado");
+                pictureBox2.Location = new System.Drawing.Point(800, 800);
+                pictureBox4.Location = new System.Drawing.Point(800, 800);
+                MessageBox.Show("Juego Terminado\nPuntuacion: "+label2.Text);
+                timer.Interval = 10000;
+                timer.Stop();
+                AgregarUsuarioEventArgs mod = new AgregarUsuarioEventArgs();
+                mod.Score = Convert.ToInt32(label2.Text);
+                OnModificar(this, mod);
+                Inicio main = new Inicio(Data);
+                main.Show();
+                this.Close();
             }
             if (pictureBox1.Bounds.IntersectsWith(pictureBox4.Bounds))
             {
-                MessageBox.Show("Juego Terminado");
+                pictureBox2.Location = new System.Drawing.Point(800, 800);
+                pictureBox4.Location = new System.Drawing.Point(800, 800);
+                MessageBox.Show("Juego Terminado\nPuntuacion: "+label2.Text);
+                timer.Interval = 10000;
+                timer.Stop();
+                AgregarUsuarioEventArgs mod = new AgregarUsuarioEventArgs();
+                mod.Score = Convert.ToInt32(label2.Text);
+                OnModificar(this, mod);
+                Inicio main = new Inicio(Data);
+                main.Show();
+                this.Close();
             }
             if (pictureBox1.Bounds.IntersectsWith(pictureBox3.Bounds))
             {
@@ -114,7 +150,16 @@ namespace Pacman_jatellez
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if(pictureBox1.Location.X != pictureBox2.Location.X)
+            if(pictureBox1.Location.X >= 560 || pictureBox1.Location.X <= 0)
+            {
+                xdif = 0;
+            }
+            if(pictureBox1.Location.Y >= 580 || pictureBox1.Location.Y <= 0)
+            {
+                ydif = 0;
+            }
+            pictureBox1.Location = new System.Drawing.Point(pictureBox1.Location.X + xdif, pictureBox1.Location.Y + ydif);
+            if (pictureBox1.Location.X != pictureBox2.Location.X)
             {
                 if(pictureBox1.Location.X > pictureBox2.Location.X)
                 {
@@ -177,6 +222,14 @@ namespace Pacman_jatellez
             pictureBox5.Location = new System.Drawing.Point(800,800);
             pictureBox3.Hide();
             pictureBox5.Hide();
+        }
+
+        private void pictureBox4_LocationChanged(object sender, EventArgs e)
+        {
+            if (pictureBox4.Bounds.IntersectsWith(pictureBox2.Bounds))
+            {
+                
+            }
         }
     }
 }

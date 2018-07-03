@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace Pacman_jatellez
 {
@@ -16,7 +19,26 @@ namespace Pacman_jatellez
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Inicio());
+
+            List<Usuario> Data = null;
+            try
+            {
+                using (Stream stream = new FileStream("Data.bin", FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    IFormatter formatter = new BinaryFormatter();
+                    Data = (List<Usuario>)formatter.Deserialize(stream);
+                    stream.Close();
+                }
+            }
+            catch (IOException)
+            {
+
+            }
+
+            /*List<Usuario> Data = new List<Usuario>();
+            Data.Add(new Usuario("yo"));*/
+
+            Application.Run(new Inicio(Data));
         }
     }
 }

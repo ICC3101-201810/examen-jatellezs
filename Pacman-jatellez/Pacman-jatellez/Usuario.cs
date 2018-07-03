@@ -10,7 +10,7 @@ namespace Pacman_jatellez
     public class Usuario
     {
         string Nombre { get; set; }
-        int Score { get; set; }
+        public int Score { get; set; }
 
         public Usuario(string MiNombre)
         {

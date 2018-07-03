@@ -8,6 +8,6 @@ namespace Pacman_jatellez
 {
     public class AgregarUsuarioEventArgs
     {
-        public string Nombre { get; set; }
+        public int Score { get; set; }
     }
 }

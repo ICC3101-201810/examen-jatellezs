@@ -3,22 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace Pacman_jatellez
 {
     class Controller
     {
-        Inicio Menu;
+        Juego juego;
+        List<Usuario> Data;
+        Usuario usuario;
 
-        public Controller(Inicio MiMenu)
+        public Controller(Juego MiJuego, List<Usuario> Datos, Usuario user)
         {
-            Menu = MiMenu;
-            Menu.OnAgregar += Menu_OnAgregar;
+            juego = MiJuego;
+            Data = Datos;
+            usuario = user;
+            juego.OnModificar += Juego_OnModificar;
         }
 
-        private void Menu_OnAgregar(object sender, AgregarUsuarioEventArgs e)
+        private void Juego_OnModificar(object sender, AgregarUsuarioEventArgs e)
         {
-            Usuario user = new Usuario(e.Nombre);
+            usuario.Score = e.Score;
+            Data.Add(usuario);
+            using (Stream stream = new FileStream("Data.bin", FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, Data);
+                stream.Close();
+            }
         }
     }
 }

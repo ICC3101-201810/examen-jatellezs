@@ -12,22 +12,23 @@ namespace Pacman_jatellez
 {
     public partial class Inicio : Form
     {
-        public event EventHandler<AgregarUsuarioEventArgs> OnAgregar;
+        
+        List<Usuario> Datos;
 
-        public Inicio()
+        public Inicio(List<Usuario> Data)
         {
             InitializeComponent();
-            Controller main = new Controller(this);
+            
+            Datos = Data;
         }
 
         private void Jugar_Click(object sender, EventArgs e)
         {
             if(this.textBox1.Text != null)
             {
-                AgregarUsuarioEventArgs nuevo = new AgregarUsuarioEventArgs();
-                nuevo.Nombre = this.textBox1.Text;
-                OnAgregar(this, nuevo);
-                Juego juego = new Juego();
+                Usuario user = new Usuario(textBox1.Text);
+                Juego juego = new Juego(Datos, user);
+                Controller main = new Controller(juego, Datos, user);
                 this.Hide();
                 juego.Show();
             }
