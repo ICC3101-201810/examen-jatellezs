@@ -49,7 +49,7 @@
             // 
             this.HighScores.Location = new System.Drawing.Point(349, 184);
             this.HighScores.Name = "HighScores";
-            this.HighScores.Size = new System.Drawing.Size(94, 40);
+            this.HighScores.Size = new System.Drawing.Size(122, 40);
             this.HighScores.TabIndex = 1;
             this.HighScores.Text = "High Scores";
             this.HighScores.UseVisualStyleBackColor = true;
@@ -76,7 +76,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(284, 111);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(159, 22);
+            this.textBox1.Size = new System.Drawing.Size(187, 22);
             this.textBox1.TabIndex = 4;
             // 
             // Inicio
